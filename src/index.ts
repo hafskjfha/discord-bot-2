@@ -1,4 +1,4 @@
-import { type Interaction } from 'discord.js';
+import { type Interaction, MessageFlags } from 'discord.js';
 import botClient from './client.js';
 import 'dotenv/config';
 import {
@@ -101,15 +101,15 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
             await welcomeCommand.execute(interaction);
         } else {
             console.warn(`No handler found for command: ${interaction.commandName}`);
-            await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", ephemeral: true });
+            await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", flags: MessageFlags.Ephemeral });
         }
     } catch (error) {
         console.error(error);
         try {
             if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ content: "명령어 실행 중 오류가 발생했습니다.", ephemeral: true });
+                await interaction.followUp({ content: "명령어 실행 중 오류가 발생했습니다.", flags: MessageFlags.Ephemeral });
             } else {
-                await interaction.reply({ content: "명령어 실행 중 오류가 발생했습니다.", ephemeral: true });
+                await interaction.reply({ content: "명령어 실행 중 오류가 발생했습니다.", flags: MessageFlags.Ephemeral });
             }
         } catch (sendErr) {
             console.error("❌ 오류 응답 전송 실패:", sendErr);

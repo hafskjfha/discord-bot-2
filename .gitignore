@@ -50,3 +50,5 @@ app/api/test
 
 # db
 *.db*
+
+/dist
