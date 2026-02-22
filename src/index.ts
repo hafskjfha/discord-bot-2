@@ -15,6 +15,7 @@ import {
     isTradeButtonInteraction,
     isTradeSelectInteraction,
     welcomeCommand,
+    recipeCommand,
 } from '@/commands/index.js';
 import { getWelcomeChannel } from '@/lib/welcome-db.js';
 
@@ -99,6 +100,8 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
             await tradeCommand.execute(interaction);
         } else if (interaction.commandName === welcomeCommand.data.name) {
             await welcomeCommand.execute(interaction);
+        } else if (interaction.commandName === recipeCommand.data.name) {
+            await recipeCommand.execute(interaction);
         } else {
             console.warn(`No handler found for command: ${interaction.commandName}`);
             await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", flags: MessageFlags.Ephemeral });
@@ -106,10 +109,15 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
     } catch (error) {
         console.error(error);
         try {
-            if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ content: "명령어 실행 중 오류가 발생했습니다.", flags: MessageFlags.Ephemeral });
+            // Check if the interaction is still valid
+            if (interaction.isRepliable()) {
+                if (interaction.replied || interaction.deferred) {
+                    await interaction.followUp({ content: "명령어 실행 중 오류가 발생했습니다.", flags: MessageFlags.Ephemeral });
+                } else {
+                    await interaction.reply({ content: "명령어 실행 중 오류가 발생했습니다.", flags: MessageFlags.Ephemeral });
+                }
             } else {
-                await interaction.reply({ content: "명령어 실행 중 오류가 발생했습니다.", flags: MessageFlags.Ephemeral });
+                console.warn("❌ Interaction is not repliable (possibly timed out or unknown).");
             }
         } catch (sendErr) {
             console.error("❌ 오류 응답 전송 실패:", sendErr);
