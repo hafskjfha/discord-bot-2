@@ -214,6 +214,12 @@ export async function handleAuctionButton(interaction: ButtonInteraction) {
         }
 
         const bidAmount = getNextMinBid(auction);
+        
+        if (!Number.isSafeInteger(bidAmount)) {
+            await interaction.reply({ content: "❌ 더 이상 입찰할 수 없습니다 (최대 금액 도달).", flags: MessageFlags.Ephemeral });
+            return;
+        }
+
         auction.currentPrice = bidAmount;
         auction.highestBidderId = interaction.user.id;
         auction.highestBidderName = interaction.user.displayName;
@@ -295,6 +301,11 @@ export async function handleAuctionModal(interaction: ModalSubmitInteraction) {
 
     if (isNaN(bidAmount)) {
         await interaction.reply({ content: "❌ 올바른 숫자를 입력해주세요.", flags: MessageFlags.Ephemeral });
+        return;
+    }
+
+    if (!Number.isSafeInteger(bidAmount)) {
+        await interaction.reply({ content: "❌ 입력한 금액이 너무 큽니다! 최대 900경까지 입력가능합니다.", flags: MessageFlags.Ephemeral });
         return;
     }
 
@@ -419,11 +430,11 @@ export const command: BotCommand = {
         activeAuctions.set(auctionId, auction);
 
         // 경매 메시지 전송
-        const reply = await interaction.reply({
+        await interaction.reply({
             embeds: [buildAuctionEmbed(auction)],
             components: [buildAuctionButtons(auction)],
-            fetchReply: true,
         });
+        const reply = await interaction.fetchReply();
         auction.messageId = reply.id;
 
         // 주기적으로 남은 시간 갱신 (30초마다)
