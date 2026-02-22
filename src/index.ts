@@ -9,6 +9,11 @@ import {
     handleAuctionModal,
     isAuctionButtonInteraction,
     isAuctionModalInteraction,
+    tradeCommand,
+    handleTradeButton,
+    handleTradeSelect,
+    isTradeButtonInteraction,
+    isTradeSelectInteraction,
 } from '@/commands/index.js';
 
 botClient.on('clientReady', async () => {
@@ -42,6 +47,26 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
         return;
     }
 
+    // 거래소/교환소 버튼 인터랙션 처리
+    if (interaction.isButton() && isTradeButtonInteraction(interaction.customId)) {
+        try {
+            await handleTradeButton(interaction);
+        } catch (error) {
+            console.error("거래 버튼 처리 오류:", error);
+        }
+        return;
+    }
+
+    // 거래소/교환소 셀렉트 메뉴 인터랙션 처리
+    if (interaction.isStringSelectMenu() && isTradeSelectInteraction(interaction.customId)) {
+        try {
+            await handleTradeSelect(interaction);
+        } catch (error) {
+            console.error("거래 셀렉트 처리 오류:", error);
+        }
+        return;
+    }
+
     if (!interaction.isChatInputCommand()) return;
 
     console.log(`Received command: ${interaction.commandName} from ${interaction.user.tag}`);
@@ -53,6 +78,11 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
             await drawingCommand.execute(interaction);
         } else if (interaction.commandName === auctionCommand.data.name) {
             await auctionCommand.execute(interaction);
+        } else if (interaction.commandName === tradeCommand.data.name) {
+            await tradeCommand.execute(interaction);
+        } else {
+            console.warn(`No handler found for command: ${interaction.commandName}`);
+            await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", ephemeral: true });
         }
     } catch (error) {
         console.error(error);

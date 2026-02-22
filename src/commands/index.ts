@@ -7,6 +7,13 @@ import {
     isAuctionButtonInteraction,
     isAuctionModalInteraction,
 } from "@/commands/auction.js";
+import {
+    command as tradeCommand,
+    handleTradeButton,
+    handleTradeSelect,
+    isTradeButtonInteraction,
+    isTradeSelectInteraction,
+} from "@/commands/trade.js";
 
 export {
     pingCommand,
@@ -16,4 +23,9 @@ export {
     handleAuctionModal,
     isAuctionButtonInteraction,
     isAuctionModalInteraction,
+    tradeCommand,
+    handleTradeButton,
+    handleTradeSelect,
+    isTradeButtonInteraction,
+    isTradeSelectInteraction,
 };
