@@ -14,6 +14,7 @@ import {
     isTradeButtonInteraction,
     isTradeSelectInteraction,
 } from "@/commands/trade.js";
+import { command as welcomeCommand } from "@/commands/welcome-message.js";
 
 export {
     pingCommand,
@@ -28,4 +29,5 @@ export {
     handleTradeSelect,
     isTradeButtonInteraction,
     isTradeSelectInteraction,
+    welcomeCommand,
 };

@@ -14,7 +14,9 @@ import {
     handleTradeSelect,
     isTradeButtonInteraction,
     isTradeSelectInteraction,
+    welcomeCommand,
 } from '@/commands/index.js';
+import { getWelcomeChannel } from '@/lib/welcome-db.js';
 
 botClient.on('clientReady', async () => {
     console.log(`Logged in as ${botClient.user?.tag}!`);
@@ -23,6 +25,21 @@ botClient.on('clientReady', async () => {
         await guild.members.fetch().catch(console.error);
     }
     console.log('✅ All guild members have been cached.');
+});
+
+botClient.on('guildMemberAdd', async (member) => {
+    if (member.user.bot) return;
+    try {
+        const channelId = getWelcomeChannel(member.guild.id);
+        if (!channelId) return;
+
+        const channel = member.guild.channels.cache.get(channelId);
+        if (channel && channel.isTextBased()) {
+            await channel.send(`<@${member.id}> 황금사과 마을에 오신것을 환영합니다`);
+        }
+    } catch (error) {
+        console.error('환영 메시지 전송 중 오류 발생:', error);
+    }
 });
 
 
@@ -80,6 +97,8 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
             await auctionCommand.execute(interaction);
         } else if (interaction.commandName === tradeCommand.data.name) {
             await tradeCommand.execute(interaction);
+        } else if (interaction.commandName === welcomeCommand.data.name) {
+            await welcomeCommand.execute(interaction);
         } else {
             console.warn(`No handler found for command: ${interaction.commandName}`);
             await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", ephemeral: true });
