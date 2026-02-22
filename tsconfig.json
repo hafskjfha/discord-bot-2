@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",                // 최신 문법 지원
+        "module": "NodeNext",              // Node.js 환경에 최적화
+        "moduleResolution": "NodeNext",
+        "outDir": "./dist",                // 컴파일된 JS가 저장될 폴더
+        "rootDir": "./src",                // TS 소스 코드 폴더
+        "strict": true,                    // 엄격한 타입 체크
+        "esModuleInterop": true,           // CommonJS/ESM 호환성
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/*"],
+            "@/commands/*": ["src/commands/*"],
+            "@/lib/*": ["src/lib/*"],
+            "@/types/*": ["src/types/*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+}
