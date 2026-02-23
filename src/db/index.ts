@@ -1,10 +1,14 @@
 import Database from "better-sqlite3";
 import path from "path";
-import { fileURLToPath } from "url";
+import fs from 'fs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const dbPath = path.join(__dirname, "discord-bot.db");
+const dbDir = path.join(process.cwd(), 'db-data');
+const dbPath = path.join(dbDir, 'discord-bot.db');
+
+// 2. [핵심] 폴더가 없으면 생성하는 로직 추가
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
 
 const db = new Database(dbPath);
 
