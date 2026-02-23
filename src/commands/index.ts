@@ -16,6 +16,7 @@ import {
 } from "@/commands/trade.js";
 import { command as welcomeCommand } from "@/commands/welcome-message.js";
 import { command as recipeCommand } from "@/commands/recipe.js";
+import { command as diceCommand } from "@/commands/dice.js";
 
 export {
     pingCommand,
@@ -31,5 +32,6 @@ export {
     isTradeButtonInteraction,
     isTradeSelectInteraction,
     welcomeCommand,
-    recipeCommand
+    recipeCommand,
+    diceCommand,
 };

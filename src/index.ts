@@ -16,6 +16,7 @@ import {
     isTradeSelectInteraction,
     welcomeCommand,
     recipeCommand,
+    diceCommand,
 } from '@/commands/index.js';
 import { getWelcomeChannel } from '@/lib/welcome-db.js';
 
@@ -102,6 +103,8 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
             await welcomeCommand.execute(interaction);
         } else if (interaction.commandName === recipeCommand.data.name) {
             await recipeCommand.execute(interaction);
+        } else if (interaction.commandName === diceCommand.data.name) {
+            await diceCommand.execute(interaction);
         } else {
             console.warn(`No handler found for command: ${interaction.commandName}`);
             await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", flags: MessageFlags.Ephemeral });
