@@ -17,6 +17,7 @@ import {
     welcomeCommand,
     recipeCommand,
     diceCommand,
+    gawibawiboCommand,
 } from '@/commands/index.js';
 import { getWelcomeChannel } from '@/lib/welcome-db.js';
 
@@ -105,6 +106,8 @@ botClient.on("interactionCreate", async (interaction: Interaction) => {
             await recipeCommand.execute(interaction);
         } else if (interaction.commandName === diceCommand.data.name) {
             await diceCommand.execute(interaction);
+        } else if (interaction.commandName === gawibawiboCommand.data.name) {
+            await gawibawiboCommand.execute(interaction);
         } else {
             console.warn(`No handler found for command: ${interaction.commandName}`);
             await interaction.reply({ content: "❌ 이 명령어는 아직 구현되지 않았습니다.", flags: MessageFlags.Ephemeral });
