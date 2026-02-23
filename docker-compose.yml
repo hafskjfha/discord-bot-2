@@ -1,0 +1,14 @@
+services:
+  discord-bot:
+    image: jtw7913/discord-bot2:latest # 또는 특정 버전(예: 1.0.0)
+    container_name: discord-bot-prod
+    restart: always
+    env_file:
+      - .env.prod
+    volumes:
+      - ./db:/app/src/db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
